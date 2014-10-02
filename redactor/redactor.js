@@ -2631,6 +2631,8 @@
 					{
 						this.paragraphize.z++;
 						this.paragraphize.safes[this.paragraphize.z] = s.outerHTML;
+						var cleanSafe = s.outerHTML.replace(/\$/g, '&#36;');
+						this.paragraphize.safes[this.paragraphize.z] = cleanSafe;
 						html = html.replace(s.outerHTML, '\n{replace' + this.paragraphize.z + '}');
 
 					}, this));

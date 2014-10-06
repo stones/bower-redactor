@@ -563,12 +563,18 @@
 					var func = (this.build.isTextarea()) ? 'fromTextarea' : 'fromElement';
 					this.build[func]();
 				},
+				rememberSelection: function()
+				{
+					this.$range = document.getSelection().getRangeAt(0).cloneRange();
+				},
 				fromTextarea: function()
 				{
 					this.$editor = $('<div />');
 					this.$textarea = this.$element;
 					this.$box.insertAfter(this.$element).append(this.$editor).append(this.$element);
 					this.$editor.addClass('redactor-editor');
+					this.$editor.on('click', this.build.rememberSelection);
+					this.$editor.on('keyup', this.build.rememberSelection);
 
 					this.$element.hide();
 				},
@@ -578,6 +584,8 @@
 					this.build.createTextarea();
 					this.$box.insertAfter(this.$editor).append(this.$editor).append(this.$textarea);
 					this.$editor.addClass('redactor-editor');
+					this.$editor.on('click', this.build.rememberSelection);
+					this.$editor.on('keyup', this.build.rememberSelection);
 
 					this.$textarea.hide();
 				},
@@ -5934,6 +5942,14 @@
 
 					this.savedSel = this.$editor.html();
 				},
+				saveOnly: function()
+				{
+					this.selection.get();
+
+					var node1 = this.selection.getMarker(1);
+
+					this.savedSel = this.$editor.html();
+				},
 				getMarker: function(num)
 				{
 					if (typeof num == 'undefined') num = 1;
@@ -5978,6 +5994,27 @@
 					this.selection.removeMarkers();
 					this.savedSel = false;
 
+				},
+				restoreOnly: function()
+				{
+					var node1 = $(this.$range.startContainer);
+					var node2 = $(this.$range.endContainer);
+					debugger
+					if (node1.length !== 0 && node2.length !== 0)
+					{
+						this.caret.set(node1, this.$range.startOffset, node2, this.$range.endOffset);
+					}
+					else if (node1.length !== 0)
+					{
+						this.caret.set(node1, 0, node1, 0);
+					}
+					else
+					{
+						this.$editor.focus();
+					}
+
+					this.selection.removeMarkers();
+					this.savedSel = false;
 				},
 				removeMarkers: function()
 				{

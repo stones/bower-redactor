@@ -5299,6 +5299,7 @@
 						if (lastNode)
 						{
 							var range = this.range.cloneRange();
+							this.$range = range
 							range.setStartAfter(lastNode);
 							range.collapse(true);
 							this.sel.removeAllRanges();
@@ -5997,20 +5998,23 @@
 				},
 				restoreOnly: function()
 				{
-					var node1 = $(this.$range.startContainer);
-					var node2 = $(this.$range.endContainer);
-					debugger
-					if (node1.length !== 0 && node2.length !== 0)
-					{
-						this.caret.set(node1, this.$range.startOffset, node2, this.$range.endOffset);
-					}
-					else if (node1.length !== 0)
-					{
-						this.caret.set(node1, 0, node1, 0);
-					}
-					else
-					{
-						this.$editor.focus();
+					if (this.$range) {
+						var node1 = $(this.$range.startContainer);
+						var node2 = $(this.$range.endContainer);
+						if (node1.length !== 0 && node2.length !== 0)
+						{
+							this.caret.set(node1, this.$range.startOffset, node2, this.$range.endOffset);
+						}
+						else if (node1.length !== 0)
+						{
+							this.caret.set(node1, 0, node1, 0);
+						}
+						else
+						{
+							this.$editor.focus();
+						}
+					} else {
+						this.caret.set(this.$editor, 0, this.$editor, 0)
 					}
 
 					this.selection.removeMarkers();

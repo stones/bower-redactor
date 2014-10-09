@@ -2213,7 +2213,8 @@
 						for (var i = 0; i < len; i++)
 						{
 							var newTag = matches[i].replace(/style="(.*?)"/i, 'style="$1" rel="$1"');
-							html = html.replace(new RegExp(matches[i], 'gi'), newTag);
+							var regExp = matches[i].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+							html = html.replace(new RegExp(regExp, 'gi'), newTag);
 						}
 					}
 

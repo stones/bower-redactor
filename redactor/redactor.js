@@ -1614,6 +1614,7 @@
 
 					this.button.setInactiveInCode();
 					this.button.setActive('html');
+					this.$editingHTML = true;
 					this.core.setCallback('source', html);
 				},
 				showVisual: function()
@@ -1640,6 +1641,8 @@
 
 					this.button.setActiveInVisual();
 					this.button.setInactive('html');
+					this.$editingHTML = false;
+					this.core.setCallback('visual', html);
 
 					this.observe.load();
 					this.opts.visual = true;
@@ -5284,27 +5287,34 @@
 					}
 					else
 					{
-						this.selection.get();
-
-						this.range.deleteContents();
-						var el = document.createElement("div");
-						el.innerHTML = text;
-						var frag = document.createDocumentFragment(), node, lastNode;
-						while ((node = el.firstChild))
-						{
-							lastNode = frag.appendChild(node);
+						if (this.$editingHTML) {
+							var textareaString = this.$textarea.val();
+							var newString = textareaString.substr(0, this.$textarea[0].selectionStart) + text + textareaString.substr(this.$textarea[0].selectionEnd, textareaString.length);
+							this.$textarea.val(newString);
 						}
+						else {
+							this.selection.get();
 
-						this.range.insertNode(frag);
+							this.range.deleteContents();
+							var el = document.createElement("div");
+							el.innerHTML = text;
+							var frag = document.createDocumentFragment(), node, lastNode;
+							while ((node = el.firstChild))
+							{
+								lastNode = frag.appendChild(node);
+							}
 
-						if (lastNode)
-						{
-							var range = this.range.cloneRange();
-							this.$range = range
-							range.setStartAfter(lastNode);
-							range.collapse(true);
-							this.sel.removeAllRanges();
-							this.sel.addRange(range);
+							this.range.insertNode(frag);
+
+							if (lastNode)
+							{
+								var range = this.range.cloneRange();
+								this.$range = range
+								range.setStartAfter(lastNode);
+								range.collapse(true);
+								this.sel.removeAllRanges();
+								this.sel.addRange(range);
+							}
 						}
 					}
 

@@ -171,6 +171,8 @@
 
 		scrollTarget: false,
 
+		headerBarHeight: 0, // Height of header bar to offset boxTopf
+
 		toolbar: true,
 		toolbarFixed: true,
 		toolbarFixedTarget: document,
@@ -1078,7 +1080,7 @@
 						boxTop = this.$box.offset().top;
 					}
 
-					if (scrollTop > boxTop)
+					if (scrollTop > boxTop - this.opts.headerBarHeight)
 					{
 						this.toolbar.observeScrollEnable(scrollTop, boxTop);
 					}

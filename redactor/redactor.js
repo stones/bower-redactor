@@ -171,8 +171,6 @@
 
 		scrollTarget: false,
 
-		headerBarHeight: 0, // Height of header bar to offset boxTopf
-
 		toolbar: true,
 		toolbarFixed: true,
 		toolbarFixedTarget: document,
@@ -1080,7 +1078,7 @@
 						boxTop = this.$box.offset().top;
 					}
 
-					if (scrollTop > boxTop - this.opts.headerBarHeight)
+					if (scrollTop > boxTop - this.opts.toolbarFixedTarget)
 					{
 						this.toolbar.observeScrollEnable(scrollTop, boxTop);
 					}
@@ -1137,6 +1135,10 @@
 						var top = (self.$toolbar.innerHeight() + self.$toolbar.offset().top) + 'px';
 						$(this).css({ position: 'absolute', top: top });
 					});
+				},
+				setToolbarFixedTopOffset: function(value)
+				{
+					this.opts.toolbarFixedTopOffset = value;
 				}
 			};
 		},

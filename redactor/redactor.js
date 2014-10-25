@@ -1078,7 +1078,7 @@
 						boxTop = this.$box.offset().top;
 					}
 
-					if (scrollTop > boxTop - this.opts.toolbarFixedTarget)
+					if (scrollTop > boxTop - this.opts.toolbarFixedTopOffset)
 					{
 						this.toolbar.observeScrollEnable(scrollTop, boxTop);
 					}

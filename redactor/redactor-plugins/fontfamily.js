@@ -5,7 +5,7 @@ RedactorPlugins.fontfamily = function()
 	return {
 		init: function ()
 		{
-			var fonts = [ 'Arial', 'Helvetica', 'Georgia', 'Times New Roman', 'Monospace' ];
+			var fonts = this.opts.fonts || [ 'Arial', 'Helvetica', 'Georgia', 'Times New Roman', 'Monospace' ];
 			var that = this;
 			var dropdown = {};
 

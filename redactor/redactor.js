@@ -563,12 +563,18 @@
 					var func = (this.build.isTextarea()) ? 'fromTextarea' : 'fromElement';
 					this.build[func]();
 				},
+				rememberSelection: function()
+				{
+					this.$range = document.getSelection().getRangeAt(0).cloneRange();
+				},
 				fromTextarea: function()
 				{
 					this.$editor = $('<div />');
 					this.$textarea = this.$element;
 					this.$box.insertAfter(this.$element).append(this.$editor).append(this.$element);
 					this.$editor.addClass('redactor-editor');
+					this.$editor.on('click', this.build.rememberSelection);
+					this.$editor.on('keyup', this.build.rememberSelection);
 
 					this.$element.hide();
 				},
@@ -578,6 +584,8 @@
 					this.build.createTextarea();
 					this.$box.insertAfter(this.$editor).append(this.$editor).append(this.$textarea);
 					this.$editor.addClass('redactor-editor');
+					this.$editor.on('click', this.build.rememberSelection);
+					this.$editor.on('keyup', this.build.rememberSelection);
 
 					this.$textarea.hide();
 				},
@@ -1070,7 +1078,7 @@
 						boxTop = this.$box.offset().top;
 					}
 
-					if (scrollTop > boxTop)
+					if (scrollTop > boxTop - this.opts.toolbarFixedTopOffset)
 					{
 						this.toolbar.observeScrollEnable(scrollTop, boxTop);
 					}
@@ -1127,6 +1135,10 @@
 						var top = (self.$toolbar.innerHeight() + self.$toolbar.offset().top) + 'px';
 						$(this).css({ position: 'absolute', top: top });
 					});
+				},
+				setToolbarFixedTopOffset: function(value)
+				{
+					this.opts.toolbarFixedTopOffset = value;
 				}
 			};
 		},
@@ -1606,6 +1618,7 @@
 
 					this.button.setInactiveInCode();
 					this.button.setActive('html');
+					this.$editingHTML = true;
 					this.core.setCallback('source', html);
 				},
 				showVisual: function()
@@ -1632,6 +1645,8 @@
 
 					this.button.setActiveInVisual();
 					this.button.setInactive('html');
+					this.$editingHTML = false;
+					this.core.setCallback('visual', html);
 
 					this.observe.load();
 					this.opts.visual = true;
@@ -2205,7 +2220,8 @@
 						for (var i = 0; i < len; i++)
 						{
 							var newTag = matches[i].replace(/style="(.*?)"/i, 'style="$1" rel="$1"');
-							html = html.replace(new RegExp(matches[i], 'gi'), newTag);
+							var regExp = matches[i].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+							html = html.replace(new RegExp(regExp, 'gi'), newTag);
 						}
 					}
 
@@ -5277,26 +5293,34 @@
 					}
 					else
 					{
-						this.selection.get();
-
-						this.range.deleteContents();
-						var el = document.createElement("div");
-						el.innerHTML = text;
-						var frag = document.createDocumentFragment(), node, lastNode;
-						while ((node = el.firstChild))
-						{
-							lastNode = frag.appendChild(node);
+						if (this.$editingHTML) {
+							var textareaString = this.$textarea.val();
+							var newString = textareaString.substr(0, this.$textarea[0].selectionStart) + text + textareaString.substr(this.$textarea[0].selectionEnd, textareaString.length);
+							this.$textarea.val(newString);
 						}
+						else {
+							this.selection.get();
 
-						this.range.insertNode(frag);
+							this.range.deleteContents();
+							var el = document.createElement("div");
+							el.innerHTML = text;
+							var frag = document.createDocumentFragment(), node, lastNode;
+							while ((node = el.firstChild))
+							{
+								lastNode = frag.appendChild(node);
+							}
 
-						if (lastNode)
-						{
-							var range = this.range.cloneRange();
-							range.setStartAfter(lastNode);
-							range.collapse(true);
-							this.sel.removeAllRanges();
-							this.sel.addRange(range);
+							this.range.insertNode(frag);
+
+							if (lastNode)
+							{
+								var range = this.range.cloneRange();
+								this.$range = range
+								range.setStartAfter(lastNode);
+								range.collapse(true);
+								this.sel.removeAllRanges();
+								this.sel.addRange(range);
+							}
 						}
 					}
 
@@ -5936,6 +5960,14 @@
 
 					this.savedSel = this.$editor.html();
 				},
+				saveOnly: function()
+				{
+					this.selection.get();
+
+					var node1 = this.selection.getMarker(1);
+
+					this.savedSel = this.$editor.html();
+				},
 				getMarker: function(num)
 				{
 					if (typeof num == 'undefined') num = 1;
@@ -5980,6 +6012,30 @@
 					this.selection.removeMarkers();
 					this.savedSel = false;
 
+				},
+				restoreOnly: function()
+				{
+					if (this.$range) {
+						var node1 = $(this.$range.startContainer);
+						var node2 = $(this.$range.endContainer);
+						if (node1.length !== 0 && node2.length !== 0)
+						{
+							this.caret.set(node1, this.$range.startOffset, node2, this.$range.endOffset);
+						}
+						else if (node1.length !== 0)
+						{
+							this.caret.set(node1, 0, node1, 0);
+						}
+						else
+						{
+							this.$editor.focus();
+						}
+					} else {
+						this.caret.set(this.$editor, 0, this.$editor, 0)
+					}
+
+					this.selection.removeMarkers();
+					this.savedSel = false;
 				},
 				removeMarkers: function()
 				{

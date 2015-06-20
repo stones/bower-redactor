@@ -75,4 +75,3 @@ if (!RedactorPlugins) var RedactorPlugins = {};
 		};
 	};
 })(jQuery);
-

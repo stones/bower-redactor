@@ -2,6 +2,18 @@
   "name": "bower-redactor",
   "version": "10.1.3",
   "description": "npm package for Imperavi's redactor",
+  "people": [
+    {
+      "name": "Tom Stones",
+      "email": "tom@tomstones.com.au",
+      "url": "http://www.tomstones.com.au/"
+    },
+    {
+      "name": "Alex Antonov",
+      "email": "kaburbundokel11g@gmail.com",
+      "url": "http://asiniy.github.io"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "stones/bower-redactor"

@@ -1,0 +1,22 @@
+{
+  "name": "bower-redactor",
+  "version": "10.1.3",
+  "description": "npm package for Imperavi's redactor",
+  "repository": {
+    "type": "git",
+    "url": "stones/bower-redactor"
+  },
+  "homepage": "https://github.com/stones/bower-redactor",
+  "files": [
+    "README.md",
+    "redactor"
+  ],
+  "main": "redactor/redactor.js",
+  "license": "MIT",
+  "keywords": [
+    "redactor",
+    "wysiwig",
+    "editor",
+    "imperavi"
+  ]
+}

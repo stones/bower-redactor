@@ -6,7 +6,7 @@ $.Redactor.opts.langs['de'] = {
 	table: 'Tabelle',
 	link: 'Link',
 	link_insert: 'Link einfügen ...',
-	link_edit: 'Edit link',
+	link_edit: 'Link Bearbeiten',
 	unlink: 'Link entfernen',
 	formatting: 'Formatvorlagen',
 	paragraph: 'Absatz',
@@ -15,7 +15,7 @@ $.Redactor.opts.langs['de'] = {
 	header1: 'Überschrift 1',
 	header2: 'Überschrift 2',
 	header3: 'Überschrift 3',
-    header4: 'Überschrift 4',
+  header4: 'Überschrift 4',
 	bold:  'Fett',
 	italic: 'Kursiv',
 	fontcolor: 'Schriftfarbe',
@@ -51,7 +51,7 @@ $.Redactor.opts.langs['de'] = {
 	right: 'Rechts',
 	image_web_link: 'Bilder Link',
 	text: 'Text',
-	mailto: 'Email',
+	mailto: 'E-Mail',
 	web: 'URL',
 	video_html_code: 'Video-Einbettungscode',
 	file: 'Datei',
@@ -71,7 +71,7 @@ $.Redactor.opts.langs['de'] = {
 	link_new_tab: 'Link in neuem Tab öffnen',
 	underline: 'Unterstrichen',
 	alignment: 'Ausrichtung',
-	filename: 'Name (optional)',
-	edit: 'Edit'
+	filename: 'Name (fakultativ)',
+	edit: 'Bearbeiten'
 };
 })( jQuery );

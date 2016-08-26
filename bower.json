@@ -1,12 +1,16 @@
 {
   "name": "redactor",
-  "version": "10.0.1",
+  "version": "10.0.9",
   "homepage": "http://imperavi.com/redactor/",
   "authors": [
     "Imparavi <http://imperavi.com.au>"
   ],
   "description": "A bower package for the Imperavi Redactor WYSIWYG library",
-  "main": "redactor/redactor.min.js",
+  "main": [
+    "redactor/redactor.min.js",
+    "redactor/redactor.css",
+    "redactor/redactor-font.eot"
+  ],
   "keywords": [
     "WYSIWYG"
   ],
